@@ -16,5 +16,21 @@ module.exports = {
       process: 'process/browser',
       Buffer: ['buffer', 'Buffer']
     })
-  ]
+  ],
+  devServer: {
+    setupMiddlewares: (middlewares, devServer) => {
+      // Add any custom middleware setup here if needed
+      return middlewares;
+    },
+    client: {
+      logging: 'info',
+      overlay: {
+        errors: true,
+        warnings: false,
+      },
+    },
+    historyApiFallback: true,
+    compress: true,
+    port: 3000,
+  }
 };

@@ -34,10 +34,13 @@
       var pusher = new Pusher('9e7a2f8e59d0f755ffba', {
         cluster: 'ap2'
       });
-
+      data = "Waffles";
       var channel = pusher.subscribe('my-channel');
       channel.bind('my-event', function(data) {
-        alert(JSON.stringify(data));
+                // Create a new paragraph to display the message
+        const p = document.createElement('p');
+        p.textContent = 'Received: ' + JSON.stringify(data);
+        document.body.appendChild(p);
       });
     </script>
   </head>

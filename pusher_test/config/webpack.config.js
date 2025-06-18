@@ -293,6 +293,18 @@ module.exports = function (webpackEnv) {
       ],
     },
     resolve: {
+      fallback: {
+        // Add the fallback configuration
+        fs: false,
+        module: false,
+        path: require.resolve('path-browserify'),
+        assert: require.resolve('assert'),
+        crypto: require.resolve('crypto-browserify'),
+        http: require.resolve('stream-http'),
+        https: require.resolve('https-browserify'),
+        os: require.resolve('os-browserify/browser'),
+        stream: require.resolve('stream-browserify'),
+      },
       // This allows you to set a fallback for where webpack should look for modules.
       // We placed these paths second because we want `node_modules` to "win"
       // if there are any conflicts. This matches Node resolution mechanism.
@@ -747,6 +759,11 @@ module.exports = function (webpackEnv) {
             },
           },
         }),
+      // Add Node polyfills
+      new webpack.ProvidePlugin({
+        process: 'process/browser',
+        Buffer: ['buffer', 'Buffer'],
+      }),
     ].filter(Boolean),
     // Turn off performance processing because we utilize
     // our own hints via the FileSizeReporter
