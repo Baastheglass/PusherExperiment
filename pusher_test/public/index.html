@@ -40,7 +40,7 @@
       channel.bind('my-event', function(data) {
         // Display the received data on the page
         const p = document.createElement('p');
-        p.textContent = 'Received from Pusher: ' + JSON.stringify(data);
+        p.textContent = 'Server: ' + data.message;
         document.body.appendChild(p);
         // Or log to console
         console.log('Received from Pusher:', data);
@@ -58,7 +58,7 @@
           body: JSON.stringify({ message: message })
         })
         const p = document.createElement('p');
-        p.textContent = "User:" + document.getElementById('message').value;
+        p.textContent = "Client:" + document.getElementById('message').value;
         document.body.appendChild(p);
       });
     });
@@ -74,7 +74,7 @@
     </p>
     <form>
       <label for="message">Message:</label>
-      <input type="text" id="message" name="message" value="Enter Message: " />
+      <input type="text" id="message" name="message" placeholder="Enter Message: " />
       <button type="button" id = "bung">Send</button> 
     </form>
   </body>
