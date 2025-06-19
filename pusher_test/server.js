@@ -12,8 +12,14 @@ const pusher = new Pusher({
   useTLS: true
 });
 
+
+// CORS middleware should be at the very top
+app.use(cors({
+  origin: 'http://localhost:3000', // explicitly allow your frontend
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type']
+}));
 // Parse JSON bodies
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -30,6 +36,7 @@ app.post('/message', (req, res) => {
         headers: req.headers,
         timestamp: new Date().toISOString()
     });
+    //req.body.message = fetch('http://192.168.100.245:5000/getResponse')
   pusher.trigger('my-channel', 'my-event', {
     message: req.body.message || 'Hello from server!'
   });

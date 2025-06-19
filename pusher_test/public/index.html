@@ -35,29 +35,39 @@
         cluster: 'ap2'
       });
       var channel = pusher.subscribe('my-channel');
+      // After subscribing to the channel
+      // Add this to handle 'my-event'
       channel.bind('my-event', function(data) {
-                // Create a new paragraph to display the message
+        // Display the received data on the page
         const p = document.createElement('p');
-        p.textContent = 'Received: ' + JSON.stringify(data);
+        p.textContent = 'Received from Pusher: ' + JSON.stringify(data);
         document.body.appendChild(p);
+        // Or log to console
+        console.log('Received from Pusher:', data);
       });
       document.addEventListener('DOMContentLoaded', function() {
         // Create a new paragraph to display the initial message
+        var button = document.getElementById('bung');
+        button.addEventListener('click', function() {
+          var message = document.getElementById('message').value;
+          var message = document.getElementById('message').value;
+        // Send message to server via HTTP POST
+        fetch('http://localhost:5000/message', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: message })
+        })
         const p = document.createElement('p');
-        p.textContent = document.getElementById('message').value;
+        p.textContent = "User:" + document.getElementById('message').value;
         document.body.appendChild(p);
       });
-      var button = document.getElementById('bung');
-      button.addEventListener('click', function() {
-        var message = document.getElementById('message').value;
-        channel.trigger('client-my-event', { message: message });
-      });
-    </script>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <h1>Pusher Test</h1>
+    });
+  </script>
+</head>
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+  <h1>Pusher Test</h1>
     <p>
       Try publishing an event to channel <code>my-channel</code>
       with event name <code>my-event</code>.
@@ -65,7 +75,7 @@
     <form>
       <label for="message">Message:</label>
       <input type="text" id="message" name="message" value="Enter Message: " />
-      <button type="button" id = "bung" onclick="sendMessage()">Send</button> 
+      <button type="button" id = "bung">Send</button> 
     </form>
   </body>
 </html>
