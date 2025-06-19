@@ -24,7 +24,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Test endpoint to trigger event
-app.post('/message', (req, res) => {
+app.post('/message', async (req, res) => {
     // Log the entire request body
     console.log('Full request body:', req.body);
     
@@ -36,9 +36,22 @@ app.post('/message', (req, res) => {
         headers: req.headers,
         timestamp: new Date().toISOString()
     });
-    //req.body.message = fetch('http://192.168.100.245:5000/getResponse')
+    let flaskResponse = '';
+    try {
+        // Make API call to Flask backend
+        const flaskRes = await fetch('http://192.168.100.245:5000/getResponse', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query: req.body?.message })
+        });
+        const flaskData = await flaskRes.json();
+        flaskResponse = flaskData.response || 'No response from Flask';
+    } catch (err) {
+        console.error('Error calling Flask API:', err);
+        flaskResponse = 'Error getting response from Flask';
+    }
   pusher.trigger('my-channel', 'my-event', {
-    message: req.body.message || 'Hello from server!'
+    message: flaskResponse || 'Flask response not available'
   });
   res.json({ status: 'sent' });
 });

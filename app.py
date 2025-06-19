@@ -10,6 +10,8 @@ def home():
 
 @app.route('/getResponse', methods = ['POST'])
 def get_response():
+    print("Headers:", request.headers)
+    print("Raw data:", request.data)
     if not request.is_json:
         return jsonify({"error": "Invalid Content-Type. Must be application/json"}), 400
     print(request)
